@@ -1,13 +1,10 @@
 
 # %%
-from torch import nn
-import numpy as np
-import matplotlib.pyplot as plt
 import torch
-import os
-os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-os.environ["MPLBACKEND"] = "module://matplotlib_inline.backend_inline"
-print(plt.get_backend())
+import matplotlib.pyplot as plt
+import numpy as np
+from torch import nn
+
 # %%
 weight = 0.7
 bias = 0.3
@@ -49,4 +46,7 @@ def plot_prediction(train_data=X_train,
 
 
 plot_prediction()
+# %%
+
+
 # %%

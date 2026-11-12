@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from torch import nn
 
+device = "cuda " if torch.cuda.is_available() else "cpu"
 # %%
 # ground truth - that is to be matched by predictions
 weight = 0.7
@@ -99,7 +100,7 @@ optimizer = torch.optim.SGD(params=model_0.parameters(), lr=0.01)
 # %%
 # an epoch is one loop through thhe data
 
-epochs = 3000
+epochs = 100
 # Create empty loss lists to track values
 train_loss_values = []
 test_loss_values = []
@@ -142,7 +143,9 @@ for epoch in range(epochs):
         # print out model state_dict
         print(model_0.state_dict())
 
- # %%
+# %%
+model_0.state_dict()
+# %%
 plot_prediction(predictions=test_preds)
 # %%
 plt.plot(epoch_count, train_loss_values, label="train loss")
@@ -177,16 +180,28 @@ loaded_model_0 = LinearRegressionModel()
 
 loaded_model_0.load_state_dict(torch.load(f=MODEL_SAVE_PATH))
 print("Loaded model weights:", loaded_model_0.state_dict())
+
 # %%
 
 # making prediction with loaded_model_0
 X_1 = torch.arange(0, 3, 0.02).unsqueeze(dim=1)
+
+# Generate the ground truth labels for X_1 (length 150)
+Y_1 = 0.7 * X_1 + 0.3
+
+
 loaded_model_0.eval()
 with torch.inference_mode():
     loaded_model_preds = loaded_model_0(X_1)
 
-loaded_model_preds
+loaded_model_preds, X_1.device
+
 # %%
 # compare loaded model preds
-plot_prediction(test_data=X_1, predictions=loaded_model_preds)
+
+
+# FIX: Pass Y_1 as test_label so the lengths match (150 and 150)
+plot_prediction(test_data=X_1, test_label=Y_1, predictions=loaded_model_preds)
+
+
 # %%
