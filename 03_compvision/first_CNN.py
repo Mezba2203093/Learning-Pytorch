@@ -294,7 +294,7 @@ def make_predictions(model: torch.nn.Module, data: list, device: torch.device = 
 
 # %%
 # %%
-random.seed(42)
+# random.seed(22)
 test_samples = []
 test_labels = []
 for sample, label in random.sample(list(test_data), k=9):
@@ -305,8 +305,36 @@ for sample, label in random.sample(list(test_data), k=9):
 print(
     f"Test sample image shape: {test_samples[0].shape}\nTest sample label: {test_labels[0]} ({class_names[test_labels[0]]})")
 
-
 # %%
-pred_probs = make_predictions(model=model_0, data=test_data, device=device)
+pred_probs = make_predictions(model=model_0, data=test_samples, device=device)
 pred_classes = pred_probs.argmax(dim=1)
 pred_classes
+# %%
+# Plot predictions
+plt.figure(figsize=(9, 9))
+nrows = 3
+ncols = 3
+for i, sample in enumerate(test_samples):
+    # Create a subplot
+    plt.subplot(nrows, ncols, i+1)
+
+    # Plot the target image
+    plt.imshow(sample.squeeze())
+
+    # Find the prediction label (in text form, e.g. "Sandal")
+    pred_label = class_names[pred_classes[i]]
+
+    # Get the truth label (in text form, e.g. "T-shirt")
+    truth_label = class_names[test_labels[i]]
+
+    # Create the title text of the plot
+    title_text = f"Pred: {pred_label} | Truth: {truth_label}"
+
+    # Check for equality and change title colour accordingly
+    if pred_label == truth_label:
+        plt.title(title_text, fontsize=10, c="g")  # green text if correct
+    else:
+        plt.title(title_text, fontsize=10, c="r")  # red text if wrong
+    plt.axis(False)
+
+# %%
