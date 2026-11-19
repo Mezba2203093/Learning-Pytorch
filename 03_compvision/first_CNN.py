@@ -122,6 +122,7 @@ model_0 = FashionMNISTModel_V1(
     hidden_unit=128,
     output_shape=len(class_names)
 ).to(device)
+# model_0 = torch.compile(model_0)
 
 model_0
 # %%
